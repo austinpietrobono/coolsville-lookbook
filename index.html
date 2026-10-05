@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Welcome to Coolsville — Lookbook</title>
+<style>
+  /* Cossette Titre & Cossette Texte — SIL Open Font License, embedded */
+  @font-face{font-family:"Cossette Titre";font-weight:400;font-style:normal;font-display:block;src:url(assets/fonts/CossetteTitre-Regular.woff2) format("woff2")}
+  @font-face{font-family:"Cossette Titre";font-weight:700;font-style:normal;font-display:block;src:url(assets/fonts/CossetteTitre-Bold.woff2) format("woff2")}
+  @font-face{font-family:"Cossette Texte";font-weight:400;font-style:normal;font-display:block;src:url(assets/fonts/CossetteTexte-Regular.woff2) format("woff2")}
+  @font-face{font-family:"Cossette Texte";font-weight:700;font-style:normal;font-display:block;src:url(assets/fonts/CossetteTexte-Bold.woff2) format("woff2")}
+
+  :root{
+    --ink:#000;
+    --paper:#fff;
+    --mute:#8c8c8c;
+    --rule:#dcdcdc;
+    box-sizing:border-box;
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  *,*::before,*::after{box-sizing:inherit}
+  html,body{height:100%;margin:0}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"Cossette Texte","Helvetica Neue",Arial,sans-serif;
+    display:flex;align-items:center;justify-content:center;
+    overflow:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* ---- the stage: a fixed 16:10 spread that scales to the window ---- */
+  #deck{
+    position:relative;
+    width:min(100vw - 2.5rem, (100vh - 3.5rem) * 1.6);
+    aspect-ratio:16/10;
+    container-type:inline-size;
+  }
+  .slide{
+    position:absolute;inset:0;
+    padding:4.5cqw 5.5cqw;
+    display:none;
+    flex-direction:column;
+  }
+  .slide.on{display:flex}
+  .slide.on{justify-content:center}
+
+  /* ---- type ---- */
+  h1,h2,.kicker,.credit{
+    font-family:"Cossette Titre","Helvetica Neue",Arial,sans-serif;
+    font-weight:700;
+    text-transform:uppercase;
+    margin:0;
+    line-height:.9;
+    letter-spacing:-.005em;
+  }
+  h1{font-size:7cqw}
+  h2{font-size:3.9cqw}
+  .kicker{font-size:1.55cqw;line-height:1.15;letter-spacing:.055em}
+  .credit{font-size:1.5cqw;line-height:1.2}
+
+  p{margin:0 0 .95em}
+  p:last-child{margin-bottom:0}
+  .body{font-size:1.4cqw;line-height:1.68;max-width:31em}
+  .body.sm{font-size:1.07cqw;line-height:1.7;max-width:36em}
+  .lede{font-size:1.9cqw;line-height:1.5;max-width:20em}
+
+  blockquote{margin:0;font-size:1.58cqw;line-height:1.58;max-width:26em}
+  .attrib{font-size:.95cqw;letter-spacing:.16em;text-transform:uppercase;color:var(--mute);margin-top:1.1em}
+
+  /* ---- images ---- */
+  img{display:block;max-width:100%;height:auto}
+  figure{margin:0}
+
+  /* ---- shared layout helpers ---- */
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:5.5cqw;flex:1;align-items:center}
+  .split.narrow{grid-template-columns:1.05fr .95fr}
+  .split.wide-right{grid-template-columns:.72fr 1.28fr}
+  .stack{display:flex;flex-direction:column;justify-content:center;gap:2.4cqw}
+  .fill{width:100%;height:100%;object-fit:contain}
+  .cap{display:flex;align-items:center;justify-content:center;height:100%}
+
+  /* ---- slide 1 / 10: title ---- */
+  .title-slide{flex-direction:row;align-items:flex-end;justify-content:center;gap:4.5cqw}
+  .title-slide .shot{height:100%;width:auto;max-width:46%;object-fit:contain;align-self:center}
+  .title-block{flex:1;text-align:left;padding-bottom:2cqw}
+  .title-block .big{font-family:"Cossette Titre",sans-serif;font-weight:700;text-transform:uppercase;font-size:5.6cqw;line-height:.86;letter-spacing:-.01em}
+  .title-block .sub{font-size:1.5cqw;margin-top:.9cqw;letter-spacing:.06em}
+  .thanks{font-size:1.05cqw;letter-spacing:.34em;text-transform:uppercase;color:var(--mute);margin-top:2.4cqw}
+
+  /* ---- slide 5: two shots over two columns ---- */
+  .shots-2{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:minmax(0,1fr);gap:2.4cqw;align-items:stretch;flex:1;min-height:0}
+  .shots-2 img{height:100%;width:100%;object-fit:cover;object-position:center top}
+  .cols-2{display:grid;grid-template-columns:1fr 1fr;gap:2.4cqw;margin-top:2.6cqw;flex:none;align-items:start}
+
+  /* ---- slide 6: 2x2 grid ---- */
+  .grid-4{display:grid;grid-template-columns:1fr 1fr;gap:1.6cqw;align-self:center;width:100%}
+  .grid-4 img{width:100%;aspect-ratio:3/2;object-fit:cover}
+
+  /* ---- slide 7: vision grid ---- */
+  .vision{display:grid;grid-template-columns:repeat(5,1fr);gap:1.2cqw;margin-top:3.2cqw;align-self:center;width:100%}
+  .slide > h1 + .vision{margin-top:4cqw}
+  .vision img{width:100%;aspect-ratio:244/255;object-fit:cover}
+
+  /* ---- slide 8: production team ---- */
+  .team{display:grid;grid-template-columns:1fr 1fr;gap:5cqw;margin-top:3cqw;flex:none}
+  .team h3{font-family:"Cossette Titre",sans-serif;font-weight:700;text-transform:uppercase;font-size:2.2cqw;line-height:.95;margin:0 0 1.3cqw;letter-spacing:-.005em}
+  .team h4{font-family:"Cossette Titre",sans-serif;font-weight:700;text-transform:uppercase;font-size:1.45cqw;line-height:1;margin:2.2cqw 0 1.1cqw;padding-top:1.6cqw;border-top:1px solid var(--rule);letter-spacing:-.005em}
+
+  /* ---- chrome ---- */
+  #counter{
+    position:fixed;right:1.6rem;bottom:1.1rem;
+    font-size:.72rem;letter-spacing:.14em;color:var(--mute);
+    font-variant-numeric:tabular-nums;
+  }
+  #hint{
+    position:fixed;left:1.6rem;bottom:1.1rem;
+    font-size:.72rem;letter-spacing:.14em;color:var(--mute);
+    transition:opacity .5s ease;
+  }
+  #hint.gone{opacity:0}
+  nav button{
+    position:fixed;top:0;bottom:0;width:18vw;border:0;background:none;
+    cursor:pointer;opacity:0;
+  }
+  nav .prev{left:0}
+  nav .next{right:0}
+  nav button:focus-visible{opacity:1;background:rgba(0,0,0,.04);outline:2px solid #000;outline-offset:-4px}
+
+  @media (max-width:760px){
+    #deck{width:calc(100vw - 1.5rem)}
+    .slide{padding:5cqw 5.5cqw}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<div id="deck">
+
+  <!-- 1 — cover -->
+  <section class="slide title-slide on">
+    <img class="shot" src="assets/img/cover.jpg" alt="Welcome to Coolsville billboard">
+    <div class="title-block">
+      <div class="big">Welcome to<br>Coolsville</div>
+      <div class="sub">Creating Rickie Lee Jones</div>
+    </div>
+  </section>
+
+  <!-- 2 — memoir -->
+  <section class="slide">
+    <div class="split narrow">
+      <div class="stack">
+        <div>
+          <div class="kicker">Based on the acclaimed memoir by</div>
+          <h2 style="margin-top:.75cqw">Rickie Lee Jones</h2>
+        </div>
+        <div>
+          <blockquote>“Last Chance Texaco: Chronicles of an American Troubador is as rich and colorful as Jones’s best lyrics. It’s a classically American picaresque tale in which she ‘lived volumes long before I was famous.’”</blockquote>
+          <div class="attrib">New York Times</div>
+        </div>
+        <div>
+          <blockquote>“Rickie Lee Jones’ life became her art.”</blockquote>
+          <div class="attrib">Rolling Stone</div>
+        </div>
+      </div>
+      <div class="cap"><img src="assets/img/memoir.jpg" alt="Rickie Lee Jones with a cigarette"></div>
+    </div>
+  </section>
+
+  <!-- 3 — the story -->
+  <section class="slide">
+    <div class="split narrow">
+      <div class="stack">
+        <h1>The<br>Story</h1>
+        <p class="lede">A runaway girl with a poet’s soul embarks on an unbelievable, pulp fiction-esque, rollercoaster ride through a magical and gritty 1970s America, ending up in L.A. and her unlikely transformation into a star.</p>
+      </div>
+      <div class="cap"><img src="assets/img/story.jpg" alt="Rickie Lee Jones with a parasol on a rain-wet street"></div>
+    </div>
+  </section>
+
+  <!-- 4 — lived volumes -->
+  <section class="slide">
+    <div class="split narrow">
+      <div class="stack">
+        <h2>“I had lived volumes,<br>long before I was famous”</h2>
+        <div class="body">
+          <p>Two-time Grammy Award winning artist and recent Grammy nominee Rickie Lee Jones is known as one of the most iconic and influential women singer-songwriters in rock and jazz music.</p>
+          <p>In “Welcome to Coolsville”, filmmaker Michael Gramaglia uses Jones’ extraordinary recent memoir to craft a hybrid, beautifully cinematic biography.</p>
+        </div>
+      </div>
+      <div class="cap"><img src="assets/img/window.jpg" alt="Rickie Lee Jones leaning out of a New York window"></div>
+    </div>
+  </section>
+
+  <!-- 5 — arizona / venice -->
+  <section class="slide">
+    <div class="shots-2">
+      <img src="assets/img/poem.jpg" alt="Rickie Lee Jones with a guitar, with handwritten page">
+      <img src="assets/img/couple.jpg" alt="Rickie Lee Jones and friend, 1970s portrait">
+    </div>
+    <div class="cols-2">
+      <p class="body">Taking us from the other worldly landscape of nascent Arizona of her youth, to living in a cave-based cult in Northern California.</p>
+      <p class="body">From her formative time as a songwriter in the creative enclave of 70s Venice Beach to her haunting the empty historic Troubadour with the likes of Tom Waits and Chuck E. Weiss, from riding around the streets of L.A. in Chevys and old Cadillacs with Lowell George, or Dr. John, to her eventual meteoric rise to stardom.</p>
+    </div>
+  </section>
+
+  <!-- 6 — archive -->
+  <section class="slide">
+    <div class="split wide-right">
+      <div class="stack">
+        <div class="body">
+          <p>Powered by a hypnotic and introspective narrative voice, we are carried along on an adventure of a lifetime.</p>
+          <p>Leaning on a rich archive of performances, photos, demo recordings, enhanced by scenes of cinematic recreation, A.I. rendering and found footage, a visually sweeping and spellbinding film emerges.</p>
+        </div>
+      </div>
+      <div class="grid-4">
+        <img src="assets/img/hands.jpg" alt="Hands raised at a concert">
+        <img src="assets/img/studio.jpg" alt="Rickie Lee Jones in the studio">
+        <img src="assets/img/room.jpg" alt="Interior, archive photograph">
+        <img src="assets/img/couch.jpg" alt="Rickie Lee Jones and Tom Waits">
+      </div>
+    </div>
+  </section>
+
+  <!-- 7 — the vision -->
+  <section class="slide">
+    <h1>The Vision</h1>
+    <div class="vision">
+      <img src="assets/img/v1.jpg" alt=""><img src="assets/img/v2.jpg" alt=""><img src="assets/img/v3.jpg" alt=""><img src="assets/img/v4.jpg" alt=""><img src="assets/img/v5.jpg" alt="">
+      <img src="assets/img/v6.jpg" alt=""><img src="assets/img/v7.jpg" alt=""><img src="assets/img/v8.jpg" alt=""><img src="assets/img/v9.jpg" alt=""><img src="assets/img/v10.jpg" alt="">
+    </div>
+  </section>
+
+  <!-- 8 — production team -->
+  <section class="slide">
+    <h2>Production Team</h2>
+    <div class="team">
+      <div>
+        <h3>Michael Gramaglia</h3>
+        <div class="body sm">
+          <p>Michael Gramaglia (Director) directed and produced the critically acclaimed and Grammy Award nominated documentary End of the Century: The Story of the Ramones and Don’t Ask Me Questions: The Unsung Life of Graham Parker.</p>
+          <p>Michael was born into a family with a long film heritage. Early in his life he mentored at Cinecitta’ in Rome under Vittoria Storaro on Ishtar, Dick Tracy and The Sheltering Sky. Following those years, Michael had extensive behind the scenes experience in the East Coast music industry.</p>
+          <p>Soon after he combined his passions of film and music and made powerful films about extraordinary musical artists and their legacy. He has also made numerous corporate films for I.B.M. that focus on the role of technology in music, art and humanity in the modern world; and smaller projects for artists such as Loudon Wainwright III, Blondie and Secret Machines.</p>
+        </div>
+        <h4>Record Breaker Films</h4>
+        <div class="body sm">
+          <p>Is founded by award-winning producers Amy Hobby (What Happened, Miss Simone?, Secretary) and Lori Cheatle to produce music related documentary and narrative features.</p>
+        </div>
+      </div>
+      <div>
+        <h3>Lori Cheatle</h3>
+        <div class="body sm">
+          <p>Lori Cheatle (Producer) is a producer and executive producer of over 25 awardwinning films and the founder of Hard Working Movies, a director-driven production company with an appetite for bold, beautiful, high-profile narratives. The films she’s produced have screened at all the top international film festivals, in cinemas and on TV and major platforms worldwide.</p>
+          <p>Some titles include Dreaming Walls, which premiered at the Berlinale, is executive produced by Martin Scorsese and released by Magnolia Pictures and Hulu; Matanga/Maya/M.I.A. (dir. Steve Loveridge), about the pop star M.I.A. which won a Special Jury Award at Sundance and the IDA Award for Best Music Documentary; US Kids (dir. Kim Snyder, Sundance 2020, Greenwich Entertainment), winner of over a dozen festival and human rights awards; Kiki (dir. Sara Jordeno, IFC Films), which premiered at Sundance and won the Berlin Teddy Award; Captivated: The Trials of Pamela Smart (HBO/Sky Atlantic, directed by Jeremiah Zagar) which was released in over 100 countries; 51 Birch Street (by Doug Block, HBO), selected as a NYT 10 Best Film of the Year; Seven Songs for a Long Life (dir. Amy Hardie, nominated for a BAFTA); and others. Lori received the Sundance Amazon Producers Award.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9 — closing quote -->
+  <section class="slide">
+    <div class="split narrow">
+      <div class="stack">
+        <blockquote style="font-size:1.95cqw;line-height:1.5;max-width:18em">“My deepest emotions are universal; the further inside myself I go, the closer I am to mankind…”</blockquote>
+        <div class="credit">Last Chance Texaco:<br>Rickie Lee Jones</div>
+      </div>
+      <div class="cap"><img src="assets/img/live.jpg" alt="Rickie Lee Jones performing with James Booker, New Orleans"></div>
+    </div>
+  </section>
+
+  <!-- 10 — end -->
+  <section class="slide title-slide">
+    <img class="shot" src="assets/img/cover.jpg" alt="Welcome to Coolsville billboard">
+    <div class="title-block">
+      <div class="big">Welcome to<br>Coolsville</div>
+      <div class="sub">Creating Rickie Lee Jones</div>
+      <div class="thanks">Thank you</div>
+    </div>
+  </section>
+
+</div>
+
+<nav>
+  <button class="prev" aria-label="Previous slide"></button>
+  <button class="next" aria-label="Next slide"></button>
+</nav>
+<div id="hint">← → to move</div>
+<div id="counter"></div>
+
+<script>
+(function(){
+  var slides=[].slice.call(document.querySelectorAll('.slide'));
+  var counter=document.getElementById('counter');
+  var hint=document.getElementById('hint');
+  var i=0, hinted=false;
+
+  function pad(n){return n<10?'0'+n:''+n}
+  function show(n){
+    i=Math.max(0,Math.min(slides.length-1,n));
+    slides.forEach(function(s,k){s.classList.toggle('on',k===i)});
+    counter.textContent=pad(i+1)+' / '+pad(slides.length);
+    if(!hinted){hinted=true;hint.classList.add('gone')}
+    try{location.hash=i+1}catch(e){}
+  }
+  function go(d){show(i+d)}
+
+  document.addEventListener('keydown',function(e){
+    if(e.metaKey||e.ctrlKey||e.altKey)return;
+    switch(e.key){
+      case 'ArrowRight': case 'ArrowDown': case 'PageDown': case ' ': go(1); e.preventDefault(); break;
+      case 'ArrowLeft': case 'ArrowUp': case 'PageUp': go(-1); e.preventDefault(); break;
+      case 'Home': show(0); e.preventDefault(); break;
+      case 'End': show(slides.length-1); e.preventDefault(); break;
+    }
+  });
+
+  document.querySelector('nav .next').addEventListener('click',function(){go(1)});
+  document.querySelector('nav .prev').addEventListener('click',function(){go(-1)});
+
+  var x0=null;
+  document.addEventListener('touchstart',function(e){x0=e.touches[0].clientX},{passive:true});
+  document.addEventListener('touchend',function(e){
+    if(x0===null)return;
+    var dx=e.changedTouches[0].clientX-x0;
+    if(Math.abs(dx)>45) go(dx<0?1:-1);
+    x0=null;
+  },{passive:true});
+
+  window.addEventListener('hashchange',function(){
+    var n=parseInt((location.hash||'').replace('#',''),10);
+    if(!isNaN(n)&&n-1!==i) show(n-1);
+  });
+
+  var start=parseInt((location.hash||'').replace('#',''),10);
+  show(isNaN(start)?0:start-1);
+})();
+</script>
+</body>
+</html>
