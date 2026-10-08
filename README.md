@@ -1,7 +1,11 @@
 # Welcome to Coolsville — Lookbook
 
-An online lookbook for *Welcome to Coolsville*, a Rickie Lee Jones documentary
-directed by Michael Gramaglia. Ten slides, navigated with the arrow keys.
+The film pitch deck for *Welcome to Coolsville*, a Rickie Lee Jones documentary
+directed by Michael Gramaglia. Eleven slides, navigated with the arrow keys.
+
+Three of the slides pair a **cinematic reference** still against **the vision**
+frame it informs — Wizard of Oz against the cornfield, One from the Heart
+against the floating Vega, and so on.
 
 ## Viewing it
 
@@ -57,8 +61,18 @@ used under the SIL Open Font License 1.1. See
 
 ## Image rights
 
-The photography in this lookbook is **not cleared for public distribution**.
-The archival and press images have photographers attached — including an Annie
-Leibovitz portrait — and the "Welcome to Coolsville" billboard frame is an
-AI-generated concept image, not a photograph. Clear all of it before this goes
-anywhere public, and consider keeping the repository private in the meantime.
+The imagery here is **not cleared for public distribution** and falls into three
+distinct categories, which matter for different reasons:
+
+- **Archival and press photographs of Rickie Lee Jones** — these have
+  photographers attached, including an Annie Leibovitz portrait. They need
+  licensing.
+- **Film stills** used as cinematic reference (The Wizard of Oz, 8½, One from
+  the Heart, Wings of Desire, Rocketman). Studio-owned; fine for an internal
+  pitch, not for publication.
+- **Generated concept frames** in the "vision" column. These are
+  AI-generated illustrations of scripted scenes, not photographs of anyone, and
+  are deliberately composed so no figure is identifiable. Label them as concept
+  art wherever this deck travels.
+
+Keep this repository private until the first two categories are cleared.
